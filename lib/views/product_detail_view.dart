@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '../models/product.dart';
+import '../controllers/cartcontroller.dart';
 
 class ProductDetailView extends StatefulWidget {
   final Product product;
-
   const ProductDetailView({super.key, required this.product});
 
   @override
@@ -11,6 +11,7 @@ class ProductDetailView extends StatefulWidget {
 }
 
 class _ProductDetailViewState extends State<ProductDetailView> {
+  final CartController _cartController = CartController();
   bool _isExpanded = false;
 
   @override
@@ -129,6 +130,9 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                         backgroundColor: Colors.black,
                       ),
                       onPressed: () {
+                        // 👇 Agrega el producto actual al carrito
+                        _cartController.addProduct(product);
+
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text("Producto agregado al carrito"),
