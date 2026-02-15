@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../controllers/cartcontroller.dart';
 import '../models/product.dart';
+import '../models/cart.dart';
 
 class CartView extends StatefulWidget {
   const CartView({super.key});
@@ -39,9 +40,8 @@ class _CartViewState extends State<CartView> {
                     child: ListView.builder(
                       itemCount: _cartController.items.length,
                       itemBuilder: (context, index) {
-                        Product product = _cartController.items[index];
-
-                        return _buildCartItem(product);
+                        final cartItem = _cartController.items[index];
+                        return _buildCartItem(cartItem);
                       },
                     ),
                   ),
