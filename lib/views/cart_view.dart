@@ -27,7 +27,7 @@ class _CartViewState extends State<CartView> {
           style: TextStyle(color: Colors.black, letterSpacing: 2),
         ),
         iconTheme: const IconThemeData(color: Colors.black),
-      ),
+      ), //comment
 
       body: _cartController.items.isEmpty
           ? const Center(child: Text("Tu carrito está vacío"))
