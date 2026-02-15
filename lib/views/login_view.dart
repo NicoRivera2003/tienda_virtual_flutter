@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../data/repository.dart';
-import '../controllers/authController.dart';
+import '../controllers/authcontroller.dart';
 import 'catalog_view.dart';
 
 class LoginView extends StatefulWidget {
@@ -14,21 +14,15 @@ class _LoginViewState extends State<LoginView> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final Repository _repository = Repository();
-  final Authcontroller _authController = Authcontroller();
 
   bool _obscurePassword = true;
 
   void _login() {
-    String email = _emailController.text;
-    String password = _passwordController.text;
-
-    bool success = _authController.autenticate(email.toLowerCase(), password);
-
-    if (success) {
+    if (AuthController.login(_emailController.text, _passwordController.text)) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const CatalogView()),
-      ); // Aquí luego navegaremos al catálogo
+      );
     } else {
       ScaffoldMessenger.of(
         context,

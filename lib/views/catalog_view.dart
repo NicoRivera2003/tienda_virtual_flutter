@@ -4,6 +4,7 @@ import '../controllers/product_controller.dart';
 import '../models/product.dart';
 import 'product_detail_view.dart';
 import 'cart_view.dart';
+import 'profile_view.dart';
 
 class CatalogView extends StatefulWidget {
   const CatalogView({super.key});
@@ -233,11 +234,16 @@ class _CatalogViewState extends State<CatalogView> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const CatalogView()),
-            ); // Regresa al catálogo
+            );
           } else if (index == 1) {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const CartView()),
+            );
+          } else if (index == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileView()),
             );
           }
         },

@@ -1,9 +1,26 @@
-import "../data/repository.dart";
+import '../models/user.dart';
 
-class Authcontroller {
-  final Repository _repository = Repository();
+class AuthController {
+  static User? _currentUser;
 
-  bool autenticate(String email, String password) {
-    return _repository.login(email, password);
+  static bool login(String username, String password) {
+    // Usuario fijo por ahora
+    if (username == "admin" && password == "1234") {
+      _currentUser = User(username: username, password: password);
+      String user = username;
+
+      return true;
+    }
+    return false;
+  }
+
+  static User? get currentUser => _currentUser;
+
+  static void logout() {
+    _currentUser = null;
+  }
+
+  static String get username {
+    return _currentUser?.username ?? "usuario";
   }
 }
