@@ -48,23 +48,89 @@ class _CartViewState extends State<CartView> {
 
                   const SizedBox(height: 20),
 
-                  /// RESUMEN
-                  _buildSummary(),
+                  /// SUBTOTAL Y ENVÍO (SIN TOTAL)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "SUBTOTAL",
+                        style: TextStyle(fontWeight: FontWeight.w900),
+                      ),
+                      Text("\$${_cartController.subtotal.toStringAsFixed(2)}"),
+                    ],
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "ENVÍO",
+                        style: TextStyle(fontWeight: FontWeight.w900),
+                      ),
+                      Text("CORTESÍA"),
+                    ],
+                  ),
+
+                  const SizedBox(height: 20),
+                ],
+              ),
+            ),
+
+      /// 🔥 FRANJA NEGRA INFERIOR
+      bottomNavigationBar: _cartController.items.isEmpty
+          ? null
+          : Container(
+              color: Colors.black,
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  /// TOTAL
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "TOTAL",
+                        style: TextStyle(
+                          color: Color(0xFFD8CFC3),
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        "\$${_cartController.subtotal.toStringAsFixed(2)}",
+                        style: const TextStyle(
+                          color: Color(0xFFD8CFC3),
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
 
                   const SizedBox(height: 20),
 
-                  /// BOTÓN FINALIZAR
+                  /// BOTÓN BEIGE
                   SizedBox(
                     width: double.infinity,
                     height: 55,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
+                        backgroundColor: const Color(0xFFD8CFC3),
+                        foregroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40),
+                        ),
                       ),
                       onPressed: () {},
                       child: const Text(
                         "FINALIZAR COMPRA",
-                        style: TextStyle(letterSpacing: 2),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 2,
+                        ),
                       ),
                     ),
                   ),
@@ -137,7 +203,11 @@ class _CartViewState extends State<CartView> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text("SUBTOTAL"),
+            const Text(
+              "SUBTOTAL",
+              style: TextStyle(fontWeight: FontWeight.w900),
+            ),
+
             Text("\$${_cartController.subtotal.toStringAsFixed(2)}"),
           ],
         ),
@@ -146,20 +216,39 @@ class _CartViewState extends State<CartView> {
 
         const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Text("ENVÍO"), Text("CORTESÍA")],
+          children: [
+            const Text("ENVÍO", style: TextStyle(fontWeight: FontWeight.w900)),
+            Text("CORTESÍA"),
+          ],
         ),
 
         const Divider(height: 30),
 
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text("TOTAL", style: TextStyle(fontWeight: FontWeight.bold)),
-            Text(
-              "\$${_cartController.subtotal.toStringAsFixed(2)}",
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            ),
-          ],
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          color: Colors.black,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "TOTAL",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30,
+                  color: Color(0xFFD8CFC3),
+                ),
+              ),
+              Text(
+                "\$${_cartController.subtotal.toStringAsFixed(2)}",
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30,
+                  color: Color(0xFFD8CFC3),
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );

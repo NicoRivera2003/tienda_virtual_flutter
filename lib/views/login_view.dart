@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../data/repository.dart';
-import '../controllers/authcontroller.dart';
+import '../controllers/authController.dart';
 import 'catalog_view.dart';
 
 class LoginView extends StatefulWidget {

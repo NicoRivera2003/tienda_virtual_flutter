@@ -4,11 +4,8 @@ class AuthController {
   static User? _currentUser;
 
   static bool login(String username, String password) {
-    // Usuario fijo por ahora
-    if (username == "admin" && password == "1234") {
+    if (username.isNotEmpty && password.isNotEmpty) {
       _currentUser = User(username: username, password: password);
-      String user = username;
-
       return true;
     }
     return false;
@@ -21,6 +18,10 @@ class AuthController {
   }
 
   static String get username {
-    return _currentUser?.username ?? "usuario";
+    if (_currentUser != null && _currentUser!.username.isNotEmpty) {
+      return _currentUser!.username;
+    } else {
+      return "usuario";
+    }
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../controllers/AuthController.dart';
+import '../controllers/authController.dart';
 import 'login_view.dart';
 
 class ProfileView extends StatelessWidget {
@@ -35,7 +35,7 @@ class ProfileView extends StatelessWidget {
 
             // Nombre de usuario dinámico
             Text(
-              AuthController.username,
+              AuthController.username.toUpperCase(),
               style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w500,
@@ -47,7 +47,7 @@ class ProfileView extends StatelessWidget {
 
             const Text(
               "Usuario activo",
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              style: TextStyle(fontSize: 30, color: Colors.grey),
             ),
 
             const SizedBox(height: 40),
