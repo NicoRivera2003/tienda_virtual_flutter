@@ -78,7 +78,7 @@ class _CartViewState extends State<CartView> {
               ),
             ),
 
-      /// 🔥 FRANJA NEGRA INFERIOR
+      // TOTAL Y FINALIZAR COMPRA
       bottomNavigationBar: _cartController.items.isEmpty
           ? null
           : Container(
@@ -140,6 +140,7 @@ class _CartViewState extends State<CartView> {
     );
   }
 
+  // Función que recibe el producto seleccionado y lo muestra en targeta
   Widget _buildCartItem(CartItem item) {
     return Card(
       color: Colors.white,

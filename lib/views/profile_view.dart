@@ -24,7 +24,7 @@ class ProfileView extends StatelessWidget {
           children: [
             const SizedBox(height: 40),
 
-            // Avatar
+            // Avatar del perfil
             const CircleAvatar(
               radius: 50,
               backgroundColor: Colors.white,
@@ -52,7 +52,6 @@ class ProfileView extends StatelessWidget {
 
             const SizedBox(height: 40),
 
-            // Información
             Card(
               color: Colors.white,
               shape: const RoundedRectangleBorder(

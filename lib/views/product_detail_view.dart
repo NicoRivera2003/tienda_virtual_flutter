@@ -80,7 +80,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
 
                   const SizedBox(height: 10),
 
-                  // DESCRIPCIÓN EXPANDIBLE
+                  // Descripción expandible
                   GestureDetector(
                     onTap: () {
                       setState(() {
@@ -122,6 +122,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
 
                   const SizedBox(height: 30),
 
+                  // Agregar al carrito
                   SizedBox(
                     width: double.infinity,
                     height: 50,
@@ -130,7 +131,6 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                         backgroundColor: Colors.black,
                       ),
                       onPressed: () {
-                        // 👇 Agrega el producto actual al carrito
                         _cartController.addProduct(product);
 
                         ScaffoldMessenger.of(context).showSnackBar(

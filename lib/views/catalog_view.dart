@@ -28,6 +28,7 @@ class _CatalogViewState extends State<CatalogView> {
     _filteredProducts = _allProducts;
   }
 
+  // Filtro de productos
   void _filterProducts(String query) {
     setState(() {
       _filteredProducts = _allProducts.where((product) {
@@ -76,7 +77,7 @@ class _CatalogViewState extends State<CatalogView> {
 
             const SizedBox(height: 20),
 
-            // 🔎 FILTRO
+            // Filtro de productos
             TextField(
               controller: _searchController,
               decoration: const InputDecoration(
@@ -91,17 +92,16 @@ class _CatalogViewState extends State<CatalogView> {
 
             const SizedBox(height: 20),
 
-            // 🛍 LISTA DE TARJETAS
+            // Lista de targetas
             Expanded(
               child: GridView.builder(
                 padding: const EdgeInsets.all(8),
                 itemCount: _filteredProducts.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, // 👈 2 productos por fila
+                  crossAxisCount: 2, // 2 productos por fila
                   crossAxisSpacing: 10, // Espacio horizontal entre cards
                   mainAxisSpacing: 10, // Espacio vertical entre cards
-                  childAspectRatio:
-                      0.75, // 👈 Ajusta esto para controlar el largo de la card
+                  childAspectRatio: 0.75,
                 ),
                 itemBuilder: (context, index) {
                   final product = _filteredProducts[index];
@@ -145,9 +145,7 @@ class _CatalogViewState extends State<CatalogView> {
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 150),
                       child: Card(
-                        elevation: _pressedIndex == index
-                            ? 8
-                            : 0, // 👈 aquí cambia
+                        elevation: _pressedIndex == index ? 8 : 0,
                         color: Colors.white,
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.zero,
@@ -206,6 +204,7 @@ class _CatalogViewState extends State<CatalogView> {
         ),
       ),
 
+      // Menú inferior
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed, // Mantiene los iconos fijos
         backgroundColor: Colors.white,

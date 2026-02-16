@@ -17,6 +17,7 @@ class _LoginViewState extends State<LoginView> {
 
   bool _obscurePassword = true;
 
+  // Lógica para autenticarse en el login y acceder al catálogo
   void _login() {
     if (AuthController.login(_emailController.text, _passwordController.text)) {
       Navigator.pushReplacement(
@@ -133,7 +134,7 @@ class _LoginViewState extends State<LoginView> {
                       "INICIAR SESIÓN",
                       style: TextStyle(
                         letterSpacing: 2,
-                        color: const Color(0xFFD8CFC3), // 👈 aquí lo cambias
+                        color: const Color(0xFFD8CFC3),
                       ),
                     ),
                   ),
