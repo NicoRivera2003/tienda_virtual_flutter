@@ -21,7 +21,7 @@ class _RegisterViewState extends State<RegisterView> {
   bool _obscureConfirm = true;
   bool _isLoading = false;
 
-  // URL base del backend — mismo host que ya usas para Products
+  // URL base del backend — mismo puerto del backend
   static const String _baseUrl = 'http://192.168.0.12:5248';
 
   Future<void> _register() async {
@@ -50,7 +50,7 @@ class _RegisterViewState extends State<RegisterView> {
 
     try {
       final response = await http.post(
-        Uri.parse('$_baseUrl/api/Auth/Register'),
+        Uri.parse('$_baseUrl/api/Auth/Register'), // PETICIÓN  POST PARA ENVIAR LOS DATOS DE REGISTRO
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'name': name, 'email': email, 'password': password}),
       );
@@ -58,7 +58,6 @@ class _RegisterViewState extends State<RegisterView> {
       final body = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        // Registro exitoso → regresar al Login
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -72,7 +71,6 @@ class _RegisterViewState extends State<RegisterView> {
           );
         }
       } else {
-        // Error del servidor (email duplicado, etc.)
         _showSnack(body['message'] ?? "Error al registrar.");
       }
     } catch (e) {
@@ -110,7 +108,6 @@ class _RegisterViewState extends State<RegisterView> {
               children: [
                 const SizedBox(height: 60),
 
-                // ── Título ──────────────────────────────────────────────
                 const Center(
                   child: Text(
                     "CREAR CUENTA",
@@ -131,7 +128,6 @@ class _RegisterViewState extends State<RegisterView> {
 
                 const SizedBox(height: 40),
 
-                // ── Nombre ──────────────────────────────────────────────
                 _fieldLabel("NOMBRE"),
                 const SizedBox(height: 8),
                 _textField(
@@ -141,7 +137,6 @@ class _RegisterViewState extends State<RegisterView> {
 
                 const SizedBox(height: 25),
 
-                // ── Email ───────────────────────────────────────────────
                 _fieldLabel("CORREO ELECTRÓNICO"),
                 const SizedBox(height: 8),
                 _textField(
@@ -152,7 +147,6 @@ class _RegisterViewState extends State<RegisterView> {
 
                 const SizedBox(height: 25),
 
-                // ── Contraseña ──────────────────────────────────────────
                 _fieldLabel("CONTRASEÑA"),
                 const SizedBox(height: 8),
                 _passwordField(
@@ -164,7 +158,6 @@ class _RegisterViewState extends State<RegisterView> {
 
                 const SizedBox(height: 25),
 
-                // ── Confirmar contraseña ────────────────────────────────
                 _fieldLabel("CONFIRMAR CONTRASEÑA"),
                 const SizedBox(height: 8),
                 _passwordField(
@@ -176,7 +169,6 @@ class _RegisterViewState extends State<RegisterView> {
 
                 const SizedBox(height: 40),
 
-                // ── Botón registrar ─────────────────────────────────────
                 SizedBox(
                   width: double.infinity,
                   height: 50,
@@ -206,7 +198,6 @@ class _RegisterViewState extends State<RegisterView> {
 
                 const SizedBox(height: 35),
 
-                // ── Volver al login ─────────────────────────────────────
                 Center(
                   child: TextButton(
                     onPressed: () => Navigator.pushReplacement(
@@ -232,8 +223,6 @@ class _RegisterViewState extends State<RegisterView> {
       ),
     );
   }
-
-  // ── Widgets reutilizables con el mismo estilo del Login ──────────────────
 
   Widget _fieldLabel(String text) {
     return Text(

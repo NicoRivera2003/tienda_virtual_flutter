@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'login_view.dart';
 import '../models/product.dart';
 import 'product_detail_view.dart';
 import 'cart_view.dart';
 import 'profile_view.dart';
 import '../services/product_service.dart';
+import '../widgets/bottom_nav_bar.dart';
 
 class CatalogView extends StatefulWidget {
   const CatalogView({super.key});
@@ -22,6 +24,8 @@ class _CatalogViewState extends State<CatalogView> {
   List<Product> _allProducts = [];
   List<Product> _filteredProducts = [];
   String _selectedCategory = 'Todos';
+
+  static const String _whatsappNumber = '573043052568';
 
   final List<String> _categories = [
     'Todos',
@@ -74,6 +78,22 @@ class _CatalogViewState extends State<CatalogView> {
     });
   }
 
+  Future<void> _openWhatsApp() async {
+    final message = Uri.encodeComponent(
+      '¡Hola! Estoy interesado en un producto de su catálogo. ¿Me pueden ayudar?'
+    );
+    final url = Uri.parse('https://wa.me/$_whatsappNumber?text=$message');
+    try {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("No se pudo abrir WhatsApp.")),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,6 +118,19 @@ class _CatalogViewState extends State<CatalogView> {
           ),
         ],
       ),
+
+      floatingActionButton: FloatingActionButton(
+        onPressed: _openWhatsApp,
+        backgroundColor: const Color(0xFF25D366),
+        tooltip: 'Contactar por WhatsApp',
+        child: Image.asset(
+          'assets/images/whatsapp.png',
+          width: 32,
+          height: 32,
+          fit: BoxFit.contain,
+        ),
+      ),
+
 
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -267,47 +300,8 @@ class _CatalogViewState extends State<CatalogView> {
       ),
 
       // Menú inferior
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed, // Mantiene los iconos fijos
-        backgroundColor: Colors.white,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: 'Inicio',
-          ),
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Carrito',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: 'Perfil',
-          ),
-        ],
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const CatalogView()),
-            );
-          } else if (index == 1) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const CartView()),
-            );
-          } else if (index == 2) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ProfileView()),
-            );
-          }
-        },
+      bottomNavigationBar: const BottomNavBar(
+        currentIndex: 0,
       ),
     );
   }

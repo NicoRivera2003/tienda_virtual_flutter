@@ -29,7 +29,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
     setState(() => _isLoading = true);
     try {
       final response = await http.post(
-        Uri.parse('$_baseUrl/api/Auth/ForgotPassword'),
+        Uri.parse('$_baseUrl/api/Auth/ForgotPassword'), //PETICIÓN POST PARA LA AUTENCICACIÓN DE USUARIO ENVIANDO AL CORREO EL CÓDIGO DE 6 DIGITOS
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email}),
       );
@@ -47,7 +47,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
     }
   }
 
-   Future<void> _resetPassword() async {
+  Future<void> _resetPassword() async {
     final email    = _emailController.text.trim();
     final token     = _tokenController.text.trim();
     final password = _passwordController.text;
@@ -166,7 +166,6 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                 const SizedBox(height: 25),
 
                 if (!_tokenSent) ...[
-                  // ─── Botón enviar código ─────────────────────────────────
                   SizedBox(
                     width: double.infinity, height: 50,
                     child: ElevatedButton(
@@ -180,7 +179,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                     ),
                   ),
                 ] else ...[
-                  // ─── Código de 6 dígitos ─────────────────────────────────
+                  //Código de 6 dígitos
                   _label("CÓDIGO DE VERIFICACIÓN"),
                   const SizedBox(height: 8),
                   TextField(
@@ -197,7 +196,6 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
 
                   const SizedBox(height: 25),
 
-                  // ─── Nueva contraseña ────────────────────────────────────
                   _label("NUEVA CONTRASEÑA"),
                   const SizedBox(height: 8),
                   TextField(
@@ -215,7 +213,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
 
                   const SizedBox(height: 25),
 
-                  // ─── Confirmar contraseña ────────────────────────────────
+
                   _label("CONFIRMAR CONTRASEÑA"),
                   const SizedBox(height: 8),
                   TextField(
@@ -233,7 +231,6 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
 
                   const SizedBox(height: 40),
 
-                  // ─── Botón cambiar contraseña ────────────────────────────
                   SizedBox(
                     width: double.infinity, height: 50,
                     child: ElevatedButton(
@@ -249,7 +246,6 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
 
                   const SizedBox(height: 16),
 
-                  // ─── Reenviar código ─────────────────────────────────────
                   Center(
                     child: TextButton(
                       onPressed: _isLoading ? null : () => setState(() => _tokenSent = false),

@@ -8,8 +8,8 @@ class ProductService {
   Future<List<Product>> fetchProducts() async {
     final response = await http.get(Uri.parse(baseUrl));
 
-    print("STATUS: ${response.statusCode}");
-    print("BODY: ${response.body}");
+    /* print("STATUS: ${response.statusCode}");
+    print("BODY: ${response.body}"); */
 
     if (response.statusCode == 200) {
       List data = json.decode(response.body);

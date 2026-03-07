@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import '../controllers/authController.dart';
+import '../widgets/bottom_nav_bar.dart';
 import 'login_view.dart';
+import 'my_orders_view.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final user = AuthController.currentUser;
-
     return Scaffold(
       backgroundColor: const Color(0xFFD8CFC3),
-
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 15, 14, 12),
         centerTitle: true,
+        automaticallyImplyLeading: false,
         title: const Text("PERFIL", style: TextStyle(color: Color(0xFFD8CFC3))),
       ),
 
@@ -24,7 +24,6 @@ class ProfileView extends StatelessWidget {
           children: [
             const SizedBox(height: 40),
 
-            // Avatar del perfil
             const CircleAvatar(
               radius: 50,
               backgroundColor: Colors.white,
@@ -33,7 +32,6 @@ class ProfileView extends StatelessWidget {
 
             const SizedBox(height: 30),
 
-            // Nombre de usuario dinámico
             Text(
               AuthController.username.toUpperCase(),
               style: const TextStyle(
@@ -45,55 +43,50 @@ class ProfileView extends StatelessWidget {
 
             const SizedBox(height: 10),
 
-            const Text(
-              "Usuario activo",
-              style: TextStyle(fontSize: 30, color: Colors.grey),
+            Text(
+              AuthController.userEmail ?? '',
+              style: const TextStyle(fontSize: 14, color: Colors.grey),
             ),
 
             const SizedBox(height: 40),
 
+            //Mis pedidos
             Card(
               color: Colors.white,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.zero,
-              ),
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
               child: ListTile(
-                leading: const Icon(Icons.lock_outline),
-                title: const Text(
-                  "Contraseña",
-                  style: TextStyle(fontFamily: 'Serif'),
-                ),
-                subtitle: Text(user?.password ?? ""),
+                leading: const Icon(Icons.receipt_long_outlined),
+                title: const Text("Mis pedidos",
+                    style: TextStyle(fontFamily: 'Serif')),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const MyOrdersView())),
               ),
             ),
 
             const SizedBox(height: 30),
 
-            // Botón cerrar sesión
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 40,
-                  vertical: 15,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
               ),
               onPressed: () {
                 AuthController.logout();
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginView()),
+                  MaterialPageRoute(builder: (_) => const LoginView()),
                   (route) => false,
                 );
               },
-              child: const Text(
-                "Cerrar sesión",
-                style: TextStyle(color: Colors.white),
-              ),
+              child: const Text("Cerrar sesión",
+                  style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
       ),
+
+      bottomNavigationBar: const BottomNavBar(currentIndex: 3),
     );
   }
 }

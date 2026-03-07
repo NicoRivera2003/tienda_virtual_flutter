@@ -45,4 +45,9 @@ class CartController {
   void clearCart() {
     _items.clear();
   }
+
+
+  void removeItem(CartItem item) {
+    _items.remove(item);
+  }
 }
