@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'login_view.dart';
-import '../controllers/product_controller.dart';
 import '../models/product.dart';
 import 'product_detail_view.dart';
 import 'cart_view.dart';
 import 'profile_view.dart';
+import '../services/product_service.dart';
 
 class CatalogView extends StatefulWidget {
   const CatalogView({super.key});
@@ -15,8 +15,9 @@ class CatalogView extends StatefulWidget {
 
 class _CatalogViewState extends State<CatalogView> {
   int? _pressedIndex;
-  final ProductController _controller = ProductController();
+  /* final ProductController _controller = ProductController(); */
   final TextEditingController _searchController = TextEditingController();
+  final ProductService _service = ProductService();
 
   List<Product> _allProducts = [];
   List<Product> _filteredProducts = [];
@@ -24,8 +25,18 @@ class _CatalogViewState extends State<CatalogView> {
   @override
   void initState() {
     super.initState();
-    _allProducts = _controller.fetchProducts();
-    _filteredProducts = _allProducts;
+    loadProducts();
+  }
+
+  Future<void> loadProducts() async {
+    final products = await _service.fetchProducts();
+
+    print(products);
+
+    setState(() {
+      _allProducts = products;
+      _filteredProducts = _allProducts;
+    });
   }
 
   // Filtro de productos

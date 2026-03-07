@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../data/repository.dart';
 import '../controllers/authController.dart';
 import 'catalog_view.dart';
+import 'register_view.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -16,10 +17,21 @@ class _LoginViewState extends State<LoginView> {
   final Repository _repository = Repository();
 
   bool _obscurePassword = true;
+  bool _isLoading = false;
 
   // Lógica para autenticarse en el login y acceder al catálogo
-  void _login() {
-    if (AuthController.login(_emailController.text, _passwordController.text)) {
+  Future<void> _login() async {
+    setState(() => _isLoading = true);
+
+    final success = await AuthController.login(
+      _emailController.text,
+      _passwordController.text,
+    );
+
+    if (!mounted) return;
+    setState(() => _isLoading = false);
+
+    if (success) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const CatalogView()),
@@ -77,6 +89,7 @@ class _LoginViewState extends State<LoginView> {
 
                 TextField(
                   controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
@@ -121,7 +134,6 @@ class _LoginViewState extends State<LoginView> {
                 ),
 
                 const SizedBox(height: 40),
-
                 SizedBox(
                   width: double.infinity,
                   height: 50,
@@ -129,14 +141,23 @@ class _LoginViewState extends State<LoginView> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
                     ),
-                    onPressed: _login,
-                    child: const Text(
-                      "INICIAR SESIÓN",
-                      style: TextStyle(
-                        letterSpacing: 2,
-                        color: const Color(0xFFD8CFC3),
-                      ),
-                    ),
+                    onPressed: _isLoading ? null : _login,
+                    child: _isLoading
+                        ? const SizedBox(
+                            height: 22,
+                            width: 22,
+                            child: CircularProgressIndicator(
+                              color: Color(0xFFD8CFC3),
+                              strokeWidth: 2.5,
+                            ),
+                          )
+                        : const Text(
+                            "INICIAR SESIÓN",
+                            style: TextStyle(
+                              letterSpacing: 2,
+                              color: Color(0xFFD8CFC3),
+                            ),
+                          ),
                   ),
                 ),
 
@@ -153,7 +174,12 @@ class _LoginViewState extends State<LoginView> {
 
                 Center(
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const RegisterView()),
+                      );
+                    },
                     child: const Text(
                       "¿Eres nuevo? Crear cuenta",
                       style: TextStyle(
