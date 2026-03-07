@@ -21,6 +21,24 @@ class _CatalogViewState extends State<CatalogView> {
 
   List<Product> _allProducts = [];
   List<Product> _filteredProducts = [];
+  String _selectedCategory = 'Todos';
+
+  final List<String> _categories = [
+    'Todos',
+    'Trajes',
+    'Calzado',
+    'Accesorios',
+    'Camisetas',
+    'Pantalones',
+  ];
+
+  final Map<String, List<String>> _categoryKeywords  = {
+    'Trajes':     ['traje', 'smoking', 'tuxedo', 'blazer', 'saco'],
+    'Calzado':    ['zapato', 'zapatilla', 'mocasin', 'bota', 'sandalia', 'calzado'],
+    'Accesorios': ['reloj', 'cinturon', 'corbata', 'bufanda', 'accesorio', 'bolso'],
+    'Camisetas':  ['camiseta', 'camisa', 'polo', 'remera', 'playera'],
+    'Pantalones': ['pantalon', 'jean', 'bermuda', 'short', 'jogger'],
+  };
 
   @override
   void initState() {
@@ -31,19 +49,27 @@ class _CatalogViewState extends State<CatalogView> {
   Future<void> loadProducts() async {
     final products = await _service.fetchProducts();
 
-    print(products);
+    /* print(products); */
 
     setState(() {
       _allProducts = products;
-      _filteredProducts = _allProducts;
+      _applyFilters();
     });
   }
 
-  // Filtro de productos
-  void _filterProducts(String query) {
+  void _applyFilters() {
+    final query = _searchController.text.toLowerCase();
     setState(() {
       _filteredProducts = _allProducts.where((product) {
-        return product.name.toLowerCase().contains(query.toLowerCase());
+        final matchesSearch = product.name.toLowerCase().contains(query) ||
+          product.description.toLowerCase().contains(query);
+
+        final matchesCategory = _selectedCategory == 'Todos' ||
+          (_categoryKeywords[_selectedCategory] ?? []).any(
+            (keyword) =>  product.name.toLowerCase().contains(keyword) ||
+                          product.description.toLowerCase().contains(keyword),
+          );
+          return matchesSearch && matchesCategory;
       }).toList();
     });
   }
@@ -98,118 +124,143 @@ class _CatalogViewState extends State<CatalogView> {
                 fillColor: Colors.white,
                 filled: true,
               ),
-              onChanged: _filterProducts,
+              onChanged: (_) => _applyFilters(),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 14),
 
-            // Lista de targetas
-            Expanded(
-              child: GridView.builder(
-                padding: const EdgeInsets.all(8),
-                itemCount: _filteredProducts.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, // 2 productos por fila
-                  crossAxisSpacing: 10, // Espacio horizontal entre cards
-                  mainAxisSpacing: 10, // Espacio vertical entre cards
-                  childAspectRatio: 0.75,
-                ),
+            SizedBox(
+              height: 38,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: _categories.length,
+                separatorBuilder: (_, __) => const SizedBox(width: 8),
                 itemBuilder: (context, index) {
-                  final product = _filteredProducts[index];
-                  List<String> priceParts = product.price.toString().split(".");
-
+                  final category = _categories[index];
+                  final isSelected = _selectedCategory == category;
                   return GestureDetector(
-                    onTapDown: (_) {
-                      setState(() {
-                        _pressedIndex = index;
-                      });
-                    },
-                    onTapUp: (_) {
-                      setState(() {
-                        _pressedIndex = null;
-                      });
-                    },
-                    onTapCancel: () {
-                      setState(() {
-                        _pressedIndex = null;
-                      });
-                    },
-                    onTap: () async {
-                      setState(() {
-                        _pressedIndex = index;
-                      });
-
-                      await Future.delayed(const Duration(milliseconds: 180));
-
-                      setState(() {
-                        _pressedIndex = null;
-                      });
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ProductDetailView(product: product),
-                        ),
-                      );
+                    onTap: () {
+                      setState(() => _selectedCategory = category);
+                      _applyFilters();
                     },
                     child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 150),
-                      child: Card(
-                        elevation: _pressedIndex == index ? 8 : 0,
-                        color: Colors.white,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.zero,
+                      duration: const Duration(milliseconds: 200),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: isSelected ? Colors.black : Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: isSelected ? Colors.black : Colors.grey.shade400,
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Container(
-                                width: double.infinity,
-                                color: const Color(0xFFF5F5F5),
-                                child: Image.network(
-                                  product.image,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    product.name,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: 'Serif',
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-
-                                  const SizedBox(height: 4),
-
-                                  Text(
-                                    "\$${priceParts[0]}",
-                                    style: const TextStyle(
-                                      fontSize: 13,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                      ),
+                      child: Text(
+                        category,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
+                          color: isSelected ? const Color(0xFFD8CFC3) : Colors.black87,
+                          letterSpacing: 0.5,
                         ),
                       ),
                     ),
                   );
                 },
               ),
+            ),
+
+            const SizedBox(height: 14),
+
+            // Lista de targetas
+            Expanded(
+              child: _filteredProducts.isEmpty
+                  ? const Center(
+                      child: Text(
+                        "No se encontraron productos.",
+                        style: TextStyle(fontSize: 16, color: Colors.black54),
+                      ),
+                    )
+                  : GridView.builder(
+                      padding: const EdgeInsets.all(8),
+                      itemCount: _filteredProducts.length,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                        childAspectRatio: 0.75,
+                      ),
+                      itemBuilder: (context, index) {
+                        final product = _filteredProducts[index];
+                        final priceParts = product.price.toString().split(".");
+
+                        return GestureDetector(
+                          onTapDown: (_) => setState(() => _pressedIndex = index),
+                          onTapUp: (_) => setState(() => _pressedIndex = null),
+                          onTapCancel: () => setState(() => _pressedIndex = null),
+                          onTap: () async {
+                            setState(() => _pressedIndex = index);
+                            await Future.delayed(const Duration(milliseconds: 180));
+                            setState(() => _pressedIndex = null);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProductDetailView(product: product),
+                              ),
+                            );
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 150),
+                            child: Card(
+                              elevation: _pressedIndex == index ? 8 : 0,
+                              color: Colors.white,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.zero,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      width: double.infinity,
+                                      color: const Color(0xFFF5F5F5),
+                                      child: Image.network(
+                                        product.image,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          product.name,
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            fontFamily: 'Serif',
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          "\$${priceParts[0]}",
+                                          style: const TextStyle(
+                                            fontSize: 13,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
             ),
           ],
         ),
