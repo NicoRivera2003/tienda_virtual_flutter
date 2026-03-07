@@ -22,7 +22,7 @@ class _RegisterViewState extends State<RegisterView> {
   bool _isLoading = false;
 
   // URL base del backend — mismo host que ya usas para Products
-  static const String _baseUrl = 'http://10.10.6.185:5248';
+  static const String _baseUrl = 'http://192.168.0.12:5248';
 
   Future<void> _register() async {
     final name = _nameController.text.trim();

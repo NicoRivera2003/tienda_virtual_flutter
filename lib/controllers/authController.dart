@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class AuthController {
   static User? _currentUser;
-  static const String _baseUrl = 'http://10.10.6.185:5248';
+  static const String _baseUrl = 'http://192.168.0.12:5248';
 
   static Future<bool> login(String email, String password) async {
     if (email.isEmpty || password.isEmpty) {

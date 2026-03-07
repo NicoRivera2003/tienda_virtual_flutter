@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../data/repository.dart';
+import 'forgot_password_view.dart';
 import '../controllers/authController.dart';
 import 'catalog_view.dart';
 import 'register_view.dart';
@@ -14,7 +14,7 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final Repository _repository = Repository();
+  /* final Repository _repository = Repository(); */
 
   bool _obscurePassword = true;
   bool _isLoading = false;
@@ -164,9 +164,15 @@ class _LoginViewState extends State<LoginView> {
                 const SizedBox(height: 35),
 
                 Center(
-                  child: const Text(
-                    "¿Olvidastes tu contraseña?",
-                    style: TextStyle(decoration: TextDecoration.underline),
+                  child: GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const ForgotPasswordView()),
+                    ),
+                    child: const Text(
+                      "¿Olvidaste tu contraseña?",
+                      style: TextStyle(decoration: TextDecoration.underline),
+                    ),
                   ),
                 ),
 
